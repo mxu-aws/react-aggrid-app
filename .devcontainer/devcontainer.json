@@ -1,0 +1,46 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.187.0/containers/typescript-node
+{
+  "name": "Node.js & TypeScript",
+  "build": {
+    "dockerfile": "Dockerfile",
+    // Update 'VARIANT' to pick a Node version: 12, 14, 16
+    "args": {
+      "VARIANT": "14"
+    }
+  },
+
+  "mounts": [
+    "source=C:\\${localEnv:HOMEPATH}/.aws/credentials,target=/home/node/.aws/credentials,type=bind,consistency=cached",
+    "source=C:\\${localEnv:HOMEPATH}/.aws/config,target=/home/node/.aws/config,type=bind,consistency=cached"
+  ],
+
+  // Set *default* container specific settings.json values on container create.
+  "settings": {},
+
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "zhuangtongfa.material-theme",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "firsttris.vscode-jest-runner",
+    "snyk-security.snyk-vulnerability-scanner"
+  ],
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [5000, 3000],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "yarn install",
+  "postCreateCommand": "sudo cp -r /root/.ssh-localhost ~ && sudo chown -R $(id -u):$(id -g) ~/.ssh-localhost && rm -fr ~/.ssh && mv ~/.ssh-localhost ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/*",
+
+  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "node",
+  "runArgs": [
+    "--env-file",
+    ".devcontainer/devcontainer.env",
+    "-v",
+    "${env:HOME}${env:USERPROFILE}/.ssh:/root/.ssh-localhost:ro"
+  ]
+}
